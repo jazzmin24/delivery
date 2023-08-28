@@ -3,7 +3,10 @@ class Product {
   int? _typeId;
   int? _offset;
   late List<ProductModel>? _products;
+  //above mentioned are all private ...do check the underscore  
   List<ProductModel>? get products => _products;
+  //get is used so tht we can access this list out of this class as well
+  //all the list items stored in this private list will be saveed here as well 
 
   Product(
       {required totalSize,
@@ -21,7 +24,7 @@ class Product {
     _typeId = json['type_id'];
     _offset = json['offset'];
     if (json['products'] != null) {
-      _products = <ProductModel>[];
+      _products = <ProductModel>[];   //initially initiallising it to empty array 
       json['products'].forEach((v) {
         _products!.add(new ProductModel.fromJson(v));
       });

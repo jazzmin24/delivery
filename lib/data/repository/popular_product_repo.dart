@@ -1,6 +1,6 @@
-import 'package:delivery/utils/app_constants.dart';
+ import 'package:delivery/utils/app_constants.dart';
 import 'package:delivery/data/api/api_client.dart';
-import 'package:delivery/utils/app_constants.dart';
+//import 'package:delivery/utils/app_constants.dart';
 import 'package:get/get.dart';
 
 //repos talk to api client using internet connection there takes more time

@@ -25,12 +25,12 @@ class PopularProductController extends GetxController {
       print('got products');
       _popularProductList = []; //save it in list
 
-      //_popularProductList.addAll(Product.fromJson(response.body).products);
+      _popularProductList.addAll(Product.fromJson(response.body).products as Iterable);
       //model is necessary taaki koi bhi change kra agr to bs sirf model m chnge krta hi saari list maps aur json m automatically chnge hoja hr jgha ek ek baar krka na krna pda
 
       //now---->> we recieve json type data need to convert it in  model
       //for now keeping these brackets empty
-      print(_popularProductList);
+      // print(_popularProductList);
       update();
       //this update is more like set state
     } else {

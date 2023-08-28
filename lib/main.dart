@@ -22,10 +22,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.find<PopularProductController>().getPopularProductList();
+    //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup 
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PopularFoodDetail(),
+      home: MainFoodPage(),
     );
   }
 }
