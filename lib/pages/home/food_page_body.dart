@@ -1,5 +1,8 @@
 import 'package:delivery/controllers/popular_product_controller.dart';
+import 'package:delivery/controllers/recommended_product_controller.dart';
 import 'package:delivery/models/products_model.dart';
+import 'package:delivery/pages/food/popular_food_detail.dart';
+import 'package:delivery/routes/route_helper.dart';
 import 'package:delivery/utils/app_constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +22,8 @@ class FoodPageBody extends StatefulWidget {
 }
 
 class _FoodPageBodyState extends State<FoodPageBody> {
-  PageController pageController = PageController(); //viewport isnt working
+  PageController pageController =
+      PageController(viewportFraction: 0.85); //viewport isnt working
   //used taaki next jo bhi slide hogi visible itna percent appear hoga at current slide
 
   //for scaling up and down while scrolling the size of next slide increases or decreases
@@ -42,6 +46,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
   @override
   void dispose() {
+    super.dispose();
     pageController.dispose();
     //to keep the memory as small as possible
   }
@@ -51,26 +56,42 @@ class _FoodPageBodyState extends State<FoodPageBody> {
     return Column(
       children: [
         //slider section
-        GetBuilder<PopularProductController>(builder: (popularProducts) {
-          return Container(
-            //color: Colors.red,     //for basic debugging ki kon si height acquire ki h
-            height: Dimentions.pageView,
-            //scrollable list that works page by page.
-            child: PageView.builder(
-                controller: PageController(viewportFraction: 0.85),
-                itemCount: popularProducts.popularProductList.length,
-                //should be equal to length of items in json
-                itemBuilder: (context, position) {
-                  //postion starts from zero and enda at 4
-                  return _buildPageItem(position, popularProducts.popularProductList[position]);
-                }),
-          );
+        GetBuilder<PopularProductController>(builder: (popularProducts) {  
+          //get builder used to get details from popular product model/api
+          return popularProducts.isLoaded
+              ? Container(
+                  //color: Colors.red,     //for basic debugging ki kon si height acquire ki h
+                  height: Dimentions.pageView,
+                  //scrollable list that works page by page.
+
+                  child: PageView.builder(
+                      controller: PageController(viewportFraction: 0.85),
+                      itemCount: popularProducts.popularProductList.length,
+                      //should be equal to length of items in json
+                      itemBuilder: (context, position) {
+                        //postion starts from zero and enda at 4
+                        return _buildPageItem(position,
+                            popularProducts.popularProductList[position]);
+                      },
+                     onPageChanged: (int page) {
+  setState(() {
+    _currPageValue = page.toDouble();
+  });
+}
+
+                      ),
+                )
+              : CircularProgressIndicator(
+                  color: AppColors.mainColor,
+                );
         }),
         //dots
         GetBuilder<PopularProductController>(builder: (popularProducts) {
           return DotsIndicator(
-            dotsCount: popularProducts.popularProductList.isEmpty?1:popularProducts.popularProductList.length,
-            //position: _currPageValue,
+            dotsCount: popularProducts.popularProductList.isEmpty
+                ? 1
+                : popularProducts.popularProductList.length,
+             position: _currPageValue.toInt(),
             decorator: DotsDecorator(
               activeColor: AppColors.mainColor,
               size: const Size.square(9.0),
@@ -83,14 +104,14 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
         //popular text
         SizedBox(
-          width: Dimentions.width30,
+          height: Dimentions.height30,
         ),
         Container(
           margin: EdgeInsets.only(left: Dimentions.width30),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              BigText(text: 'Popular'),
+              BigText(text: 'Recommended'),
               SizedBox(
                 width: Dimentions.widtht10,
               ),
@@ -110,98 +131,121 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             ],
           ),
         ),
+        //recommended food
         //list of food and images
-        ListView.builder(
-            //when we want to create a list recursively without writing code again and again then ListView.builder is used instead of ListView.  ListView.builder creates a scrollable, linear array of widgets.
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            //taaki page view aur list view sath m scroll ho in case of always scrollable sathm scroll ni hora
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(
-                    left: Dimentions.width20,
-                    right: Dimentions.width20,
-                    bottom: Dimentions.height10),
-                child: Row(
-                  children: [
-                    //image section
-                    Container(
-                      height: Dimentions.listViewImgSize,
-                      width: Dimentions.listViewImgSize,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimentions.radius20),
-                        color: Color.fromARGB(255, 235, 229, 211),
-                        // Colors.white38,
-                        // image: DecorationImage(
-                        //   fit: BoxFit.cover,
-                        //   image: AssetImage('')
-                        // ),
-                      ),
-                    ),
-                    //text section
-                    Expanded(
-                      //bacha hua sara space aquire kr le
+        GetBuilder<RecommendedProductController>(
+            builder: (recommendedProducts) {
+          return recommendedProducts.isLoaded
+              ? ListView.builder(
+                  //when we want to create a list recursively without writing code again and again then ListView.builder is used instead of ListView.  ListView.builder creates a scrollable, linear array of widgets.
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  //taaki page view aur list view sath m scroll ho in case of always scrollable sathm scroll ni hora
+                  itemCount: recommendedProducts.recommendedProductList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(
+                          RouteHelper.getRecommendedFood(index, 'home')),
                       child: Container(
-                        height: Dimentions.pageViewTextContainer,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(Dimentions.radius20),
-                              bottomRight: Radius.circular(Dimentions.radius20),
+                        margin: EdgeInsets.only(
+                            left: Dimentions.width20,
+                            right: Dimentions.width20,
+                            bottom: Dimentions.height10),
+                        child: Row(
+                          children: [
+                            //image section
+                            Container(
+                              height: Dimentions.listViewImgSize,
+                              width: Dimentions.listViewImgSize,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(Dimentions.radius20),
+                                color: Color.fromARGB(255, 235, 229, 211),
+                                // Colors.white38,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(AppConstants.BASE_URL +
+                                        AppConstants.UPLOAD_URL +
+                                        recommendedProducts
+                                            .recommendedProductList[index]
+                                            .img!)),
+                              ),
                             ),
-                            color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: Dimentions.widtht10,
-                              right: Dimentions.widtht10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              BigText(text: 'Nutritious food meal in China'),
-                              SizedBox(
-                                height: Dimentions.height10,
-                              ),
-                              SmallText(text: 'With chinese characteristics'),
-                              SizedBox(
-                                height: Dimentions.height10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  //since we are using these icons again and again so lets make it a widget
-                                  IconAndTextWidget(
-                                      icon: Icons.circle_sharp,
-                                      text: 'Normal',
-                                      iconColor: AppColors.iconColor1),
+                            //text section
+                            Expanded(
+                              //bacha hua sara space aquire kr le
+                              child: Container(
+                                height: Dimentions.pageViewTextContainer,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topRight:
+                                          Radius.circular(Dimentions.radius20),
+                                      bottomRight:
+                                          Radius.circular(Dimentions.radius20),
+                                    ),
+                                    color: Colors.white),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: Dimentions.widtht10,
+                                      right: Dimentions.widtht10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BigText(
+                                          text: recommendedProducts
+                                              .recommendedProductList[index]
+                                              .name!),
+                                      SizedBox(
+                                        height: Dimentions.height10,
+                                      ),
+                                      SmallText(
+                                          text: 'With chinese characteristics'),
+                                      SizedBox(
+                                        height: Dimentions.height10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          //since we are using these icons again and again so lets make it a widget
+                                          IconAndTextWidget(
+                                              icon: Icons.circle_sharp,
+                                              text: 'Normal',
+                                              iconColor: AppColors.iconColor1),
 
-                                  IconAndTextWidget(
-                                      icon: Icons.location_on,
-                                      text: '1.7 km',
-                                      iconColor: AppColors.mainColor),
+                                          IconAndTextWidget(
+                                              icon: Icons.location_on,
+                                              text: '1.7 km',
+                                              iconColor: AppColors.mainColor),
 
-                                  IconAndTextWidget(
-                                      icon: Icons.access_time_rounded,
-                                      text: '32 min',
-                                      iconColor: AppColors.iconColor2),
-                                ],
+                                          IconAndTextWidget(
+                                              icon: Icons.access_time_rounded,
+                                              text: '32 min',
+                                              iconColor: AppColors.iconColor2),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                    );
+                  })
+              : CircularProgressIndicator(
+                  color: AppColors.mainColor,
+                );
+        })
       ],
     );
   }
 
-  Widget _buildPageItem(int index,ProductModel popularProduct) {
+//actual page appearance
+  Widget _buildPageItem(int index, ProductModel popularProduct) {
     //Matrix4 is an api from flutter that is used for scaling up and down
     //provides easy ways to do transformations such as translation, scaling, and rotation,
     Matrix4 matrix = new Matrix4.identity();
@@ -209,7 +253,8 @@ class _FoodPageBodyState extends State<FoodPageBody> {
       var currScale = 1 - (_currPageValue - index) * (1 - _scaleFactor);
       var currTrans = _height * (1 - currScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
-        ..setTranslationRaw(0, currTrans, 0);
+        ..setTranslationRaw(
+            0, currTrans, 0); //currtrans for placing it at the middle
     } else if (index == _currPageValue.floor() + 1) {
       //condition for next slide
       var currScale =
@@ -235,20 +280,31 @@ class _FoodPageBodyState extends State<FoodPageBody> {
       transform: matrix,
       child: Stack(
         children: [
-          Container(
-            height: Dimentions.pageViewContainer,
-            //no need kyuki apna parent widget ki hi height its taking
-            //but jb it is wrapped in stack tb le lega ye height
-            margin: EdgeInsets.only(
-                left: Dimentions.widtht10, right: Dimentions.widtht10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimentions.radius30),
-              color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
-              //by the tym image is loaded as network image toh ye color rhega
-              image:
-                  DecorationImage(fit: BoxFit.cover, image: NetworkImage(
-                  AppConstants.BASE_URL + "/uploads/" + popularProduct.img!
-                  ))
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                  RouteHelper.getPopularFood(index, 'home')); //pasing fnction
+            },
+
+            child: 
+            Container(
+              height: Dimentions.pageViewContainer,
+              //no need kyuki apna parent widget ki hi height its taking
+              //but jb it is wrapped in stack tb le lega ye height
+              margin: EdgeInsets.only(
+                  left: Dimentions.widtht10, right: Dimentions.widtht10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimentions.radius30),
+                  color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
+                  //by the tym image is loaded as network image toh ye color rhega
+                   image: DecorationImage(
+                      fit: BoxFit.cover,          
+                      image: NetworkImage(AppConstants.BASE_URL +
+                        AppConstants.UPLOAD_URL +
+                          popularProduct.img!))
+                  
+                          ),
+                          
             ),
           ),
           Align(
@@ -282,7 +338,8 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 padding: EdgeInsets.only(
                     top: Dimentions.height15, left: 15, right: 15),
                 child: AppColumn(
-                  text: 'Chinese Side',
+                  //  text: 'Chinese Side',                    //need to chnge this hard coded
+                  text: popularProduct.name!,
                 ),
               ),
             ),

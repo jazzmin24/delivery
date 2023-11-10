@@ -1,3 +1,5 @@
+//both the contrllers popular product and recommended are using same product model  
+
 class Product {
   int? _totalSize;
   int? _typeId;
@@ -26,7 +28,7 @@ class Product {
     if (json['products'] != null) {
       _products = <ProductModel>[];   //initially initiallising it to empty array 
       json['products'].forEach((v) {
-        _products!.add(new ProductModel.fromJson(v));
+        _products?.add(new ProductModel.fromJson(v));   //neeed not use any operator
       });
     }
   }
@@ -68,4 +70,22 @@ class ProductModel {
     updatedAt = json['updated_at'];
     typeId = json['type_id'];
   }
+
+Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'name': this.name,
+      'price': this.price,
+      'img': this.img,
+      'location': this.location,
+      'createdAt': this.createdAt,
+      'updatedAt': this.updatedAt,
+      'typeId': this.typeId,
+
+    
+     
+    };
+  }
+
+
 }

@@ -1,4 +1,9 @@
+import 'package:delivery/controllers/cart_controller.dart';
 import 'package:delivery/controllers/popular_product_controller.dart';
+import 'package:delivery/controllers/recommended_product_controller.dart';
+import 'package:delivery/pages/cart/cart_page.dart';
+import 'package:delivery/pages/splash/splash_page.dart';
+import 'package:delivery/routes/route_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery/controllers/popular_product_controller.dart';
 import 'package:delivery/pages/food/popular_food_detail.dart';
@@ -22,11 +27,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.find<PopularProductController>().getPopularProductList();
-    //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup 
-
+    //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup
+    Get.find<RecommendedProductController>().getRecommendedProductList();
+    Get.find<CartController>().getCartData();
+    // return GetBuilder<PopularProductController>(builder: (_) {      //since without builder delete hora tha memory se ye
+    //   return GetBuilder<PopularProductController>(builder: (_) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainFoodPage(),
+      //home: MainFoodPage(),
+      initialRoute: RouteHelper.getSplashPage(),
+      getPages: RouteHelper.routes,
     );
+    //   });
+    // });
   }
 }

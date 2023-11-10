@@ -16,11 +16,11 @@ class _MainFoodPageState extends State<MainFoodPage> {
   @override
   Widget build(BuildContext context) {
     //height of present screen
-    print("current height is " + MediaQuery.of(context).size.height.toString());
+    // print("current height is " + MediaQuery.of(context).size.height.toString());
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          Container( 
             //header
             child: Container(
               //margin
