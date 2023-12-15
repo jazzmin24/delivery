@@ -24,6 +24,19 @@ class ApiClient extends GetConnect implements GetxService {
     };
   }
   //url hoga braces m
+
+void updateHeader(String token){
+  _mainHeaders = {
+      //for asking json data
+      'Content-type':
+          'application/json; charset=UTF-8', //charset for decoding and ending most of the tym no such need
+      'Authorization':
+          'Bearer $token' //in case u make a lot of post requests u should have token from your device to server
+      //bearer is token type used for authentication
+    };
+}
+
+
   Future<Response> getData(
     String uri,
   ) async {
@@ -35,6 +48,18 @@ class ApiClient extends GetConnect implements GetxService {
     } catch (e) {
       return Response(statusCode: 1, statusText: e.toString());
       //printing error through status text
+    }
+  }
+
+   Future <Response> postData(String uri, dynamic body) async {
+    print(body.toString());
+    try {
+      Response response = await post(uri, body, headers: _mainHeaders);
+      print(response.toString());
+      return response;
+    } catch (e) {
+      print(e.toString());
+      return Response(statusCode: 1, statusText: e.toString());
     }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:delivery/controllers/cart_controller.dart';
 import 'package:delivery/controllers/popular_product_controller.dart';
 import 'package:delivery/controllers/recommended_product_controller.dart';
+import 'package:delivery/pages/auth/sign_in_page.dart';
+import 'package:delivery/pages/auth/sign_up_page.dart';
 import 'package:delivery/pages/cart/cart_page.dart';
 import 'package:delivery/pages/splash/splash_page.dart';
 import 'package:delivery/routes/route_helper.dart';
@@ -34,9 +36,9 @@ class MyApp extends StatelessWidget {
     //   return GetBuilder<PopularProductController>(builder: (_) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      //home: MainFoodPage(),
+    //  home: SignInPage(),
       initialRoute: RouteHelper.getSplashPage(),
-      getPages: RouteHelper.routes,
+     getPages: RouteHelper.routes,
     );
     //   });
     // });

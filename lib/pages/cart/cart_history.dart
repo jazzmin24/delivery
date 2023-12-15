@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class CartHistory extends StatelessWidget {
-  const CartHistory({super.key});
+  const CartHistory({super.key});  
 
   @override
   Widget build(BuildContext context) {

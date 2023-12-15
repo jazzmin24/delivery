@@ -1,9 +1,13 @@
+import 'package:delivery/controllers/popular_product_controller.dart';
+import 'package:delivery/controllers/recommended_product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery/pages/home/food_page_body.dart';
 import 'package:delivery/utils/colors.dart';
 import 'package:delivery/utils/dimentions.dart';
 import 'package:delivery/widgets/big_text.dart';
 import 'package:delivery/widgets/small_text.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class MainFoodPage extends StatefulWidget {
   const MainFoodPage({super.key});
@@ -13,12 +17,18 @@ class MainFoodPage extends StatefulWidget {
 }
 
 class _MainFoodPageState extends State<MainFoodPage> {
+   Future<void> _loadResource() async {
+   await Get.find<PopularProductController>().getPopularProductList();
+    //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup 
+   await Get.find<RecommendedProductController>().getRecommendedProductList();
+  }
   @override
   Widget build(BuildContext context) {
     //height of present screen
     // print("current height is " + MediaQuery.of(context).size.height.toString());
-    return Scaffold(
-      body: Column(
+    return RefreshIndicator(
+      onRefresh: _loadResource,
+      child: Column(
         children: [
           Container( 
             //header
