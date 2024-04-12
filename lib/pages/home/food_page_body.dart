@@ -78,7 +78,6 @@ class _FoodPageBodyState extends State<FoodPageBody> {
     _currPageValue = page.toDouble();
   });
 }
-
                       ),
                 )
               : CircularProgressIndicator(

@@ -20,13 +20,23 @@ class AuthRepo {
     return  sharedPreferences.containsKey(AppConstants.TOKEN);
   }
 
-  Future<String> getUserToken()async {
-    return await sharedPreferences.getString(AppConstants.TOKEN) ?? "NONE";
+  // Future<String> getUserToken()async {
+  //   return (await sharedPreferences.getString(AppConstants.TOKEN)) ?? "NONE";
+  // }
+Future<String> getUserToken() async {
+  try {
+    final token = await sharedPreferences.getString(AppConstants.TOKEN);
+    return token ?? "NONE";
+  } catch (e) {
+    // Handle any errors that might occur during SharedPreferences access
+    print("Error getting user token: $e");
+    return "NONE";
   }
+}
 
-  Future<Response> login(String email, String password) async { 
+  Future<Response> login(String phone, String password) async { 
     return await apiClient.postData(
-        AppConstants.LOGIN_URI, {"email": email, "password": password});
+        AppConstants.LOGIN_URI, {"phone": phone, "password": password});
   }
 
   Future<bool> saveUserToken(String token) async {

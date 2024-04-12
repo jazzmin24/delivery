@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:delivery/data/repository/auth_repo.dart';
 import 'package:delivery/models/response_model.dart';
 import 'package:delivery/models/signup_body_model.dart';
@@ -27,32 +29,82 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  Future<ResponseModel> login(String email, String password) async {
-    print("Getting token");
-    print(authRepo.getUserToken().toString());
-    _isLoading = true;
-    update();
-    Response response = await authRepo.login(email, password);
-    late ResponseModel responseModel;
-    if (response.statusCode == 200) {
-       print("Backend Token");
-      authRepo.saveUserToken(response.body["token"]);
-       print(response.body["token"].toString());
-      responseModel = ResponseModel(true, response.body["token"]);
+  Future<ResponseModel> login(String phone, String password) async {
+  print("Getting token");
+  print(await authRepo.getUserToken()); // Await the getUserToken() call
+  _isLoading = true;
+  update();
+
+  Response response = await authRepo.login(phone, password);
+  late ResponseModel responseModel;
+
+  if (response.statusCode == 200) {
+    print("Backend Token");
+    dynamic token = response.body["token"];
+
+    if (token != null) {
+      if (token is String) {
+        authRepo.saveUserToken(token);
+        print(token);
+        responseModel = ResponseModel(true, token);
+      } else {
+        // Handle the scenario where the token is not a String
+        print("Invalid token format in the response");
+        responseModel = ResponseModel(false, "Invalid token format");
+      }
     } else {
-      print("Login Error: ${response.statusCode} - ${response.statusText}");
-      responseModel = ResponseModel(false, response.statusText!);
+      // Handle the scenario where the token is null
+      print("Token not found in the response");
+      responseModel = ResponseModel(false, "Token not found");
     }
-    _isLoading = false;
-    update();
-    return responseModel;
+  } else {
+    print("Login Error: ${response.statusCode} - ${response.statusText}");
+    responseModel = ResponseModel(false, response.statusText!);
   }
+
+  _isLoading = false;
+  update();
+  return responseModel;
+}
+
+
+  // Future<ResponseModel> login(String phone, String password) async {
+  //   print("Getting token");
+  //   print(await authRepo.getUserToken()); // Await the getUserToken() call
+  //   _isLoading = true;
+  //   update();
+
+  //   Response response = await authRepo.login(phone, password);
+  //   late ResponseModel responseModel;
+
+  //   if (response.statusCode == 200) {
+  //     print("Backend Token");
+  //     String? token = response.body["token"] as String?;
+  //     //log(token.toString());
+  //     // if (token != null) {
+  //     //   authRepo.saveUserToken(token);
+  //     //   print(token);
+  //     //   responseModel = ResponseModel(true, token);
+  //     // } else {
+  //     //   // Handle the scenario where the token is not present in the response
+  //     //   print("Token not found in the response");
+  //     //   responseModel = ResponseModel(false, "Token not found");
+  //     // }
+  //   } else {
+  //     print("Login Error: ${response.statusCode} - ${response.statusText}");
+  //     responseModel = ResponseModel(false, response.statusText!);
+  //   }
+
+  //   _isLoading = false;
+  //   update();
+  //   return responseModel;
+  // }
 
   void saveUserNumberAndPassword(String number, String password) {
     authRepo.saveUserNumberAndPassword(number, password);
   }
 
   bool userLoggedIn() {
-    return  authRepo.userLoggedIn();
+    return authRepo.userLoggedIn();
   }
 }

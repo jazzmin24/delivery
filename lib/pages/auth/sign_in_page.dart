@@ -207,74 +207,54 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key? key});
+   SignInPage({Key? key});
 
-  @override
-  Widget build(BuildContext context) {
-    var emailController = TextEditingController();
+ var phoneController = TextEditingController();
     var passwordController = TextEditingController();
-
 void _login(AuthController authController) {
-      String email = emailController.text.trim();
+      String phone = phoneController.text.trim();
       String password = passwordController.text.trim();
       print("start registration");
       print("pass registration");
-      if (email.isEmpty) {
-        showCustomSnackBar("Type in your email address",
-            title: "Email address");
-      } else if (!GetUtils.isEmail(email)) {
-        showCustomSnackBar("Type in your valid email address",
-            title: "Valid email address");
+      if (phone.isEmpty) {
+        showCustomSnackBar("Type in your phone number", title: "Phone number");
       } else if (password.isEmpty) {
         showCustomSnackBar("Type in your password", title: "Password");
       } else if (password.length < 6) {
         showCustomSnackBar("Password can not be less than six characters",
             title: "Password");
       } else {
-        //showCustomSnackBar("All went well!", title: "Perfect");
 
-        authController.login(email, password).then((status) {
+
+        authController.login(phone, password).then((status) {
           if (status.isSuccess) {
-            RouteHelper.getInitial();
-            //Get.toNamed(RouteHelper.getInitial());
-            //Get.toNamed(RouteHelper.getCartPage());
+             Get.back();
             print("sucess registration");
           } else {
             showCustomSnackBar("error hai bhyiii ",
                 title: "can't fetch details");
-            //showCustomSnackBar(status.message);
           }
         });
+        
+
+        // authController.login(phone, password); 
+        // {
+        //   if (status.isSuccess) {
+        //     //RouteHelper.getInitial();
+        //      Get.back();
+        //     print("sucess registration");
+        //   } else {
+        //     showCustomSnackBar("error hai bhyiii ",
+        //         title: "can't fetch details");
+        //   }
+        // });
       }
     }
-//     void _login(AuthController authController) async {
-//       String email = emailController.text.trim();
-//       String password = passwordController.text.trim();
 
-//       if (email.isEmpty || !GetUtils.isEmail(email)) {
-//         showCustomSnackBar("Enter a valid email address", title: "Email address");
-//       } else if (password.isEmpty || password.length < 6) {
-//         showCustomSnackBar("Enter a valid password", title: "Password");
-//       } else {
-//         try {
-//   var status = await authController.login(email, password);
-
-//   if (status.isSuccess) {
-//     RouteHelper.getInitial();
-//     print("Successful login");
-//   } else {
-//     print("Login failed: ${status.message}");
-//     showCustomSnackBar(status.message, title: "Login Error");
-//   }
-// } catch (e) {
-//   print("An error occurred during login: $e");
-//   showCustomSnackBar("An unexpected error occurred. Please try again.", title: "Error");
-// }
-
-//       }
-//     }
-
-    return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+   
+ return Scaffold(
       backgroundColor: Colors.white,
       body: GetBuilder<AuthController>(
         builder: (authController) => !authController.isLoading
@@ -323,9 +303,9 @@ void _login(AuthController authController) {
                     ),
                     //your email
                     AppTextField(
-                      textController: emailController,
-                      hintText: 'Email',
-                      icon: Icons.email,
+                      textController: phoneController,
+                      hintText: 'Phone',
+                      icon: Icons.phone,
                     ),
                     SizedBox(
                       height: Dimentions.height20,
