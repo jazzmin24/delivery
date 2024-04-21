@@ -17,8 +17,8 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   List pages = [
     MainFoodPage(),
-    Container(child: Text("History Page"),),
-   // SignInPage(),
+    //Container(child: Text("History Page"),),
+    SignInPage(),
     CartHistory(),
     AccountPage(),
   ];
@@ -49,8 +49,7 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.archive), label: 'History'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart), label: 'Cart'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person), label: 'Me'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Me'),
           ]),
     );
   }

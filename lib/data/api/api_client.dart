@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'dart:convert';
 import 'package:delivery/utils/app_constants.dart';
 import 'package:get/get.dart';
 
@@ -50,16 +50,49 @@ class ApiClient extends GetConnect implements GetxService {
     }
   }
 
+//  import 'dart:convert';
+// import 'package:http/http.dart';
+
   Future<Response> postData(String uri, dynamic body) async {
     print(body.toString());
     try {
       Response response = await post(uri, body, headers: _mainHeaders);
       log("inside post data");
-      log(response.toString());
+      log(uri);
+      log(response.statusCode.toString());
+      log(response.body.toString());
+
+      // Parse the JSON response
+      //Map<String, dynamic> responseData = json.decode(response.body);
+
+      // Access the values from the parsed response
+      var phone = response.body['phone'];
+      var token = response.body['token'];
+      var isPhoneVerified = response.body['is_phone_verified'];
+
+      // Print the values
+      log('Phone: $phone');
+      log('Token: $token');
+      log('Is Phone Verified: $isPhoneVerified');
+
       return response;
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       return Response(statusCode: 1, statusText: e.toString());
     }
-  }
+  } 
+  //   print(body.toString());
+  //   try {
+  //     Response response = await post(uri, body, headers: _mainHeaders);
+  //     log("inside post data");
+  //     log(uri);
+  //     log(response.statusCode.toString());
+  //     log(response.body.toString());
+  //     log(response.body["token"].toString());
+  //     return response;
+  //   } catch (e) {
+  //     log(e.toString());
+  //     return Response(statusCode: 1, statusText: e.toString());
+  //   }
+  // }
 }

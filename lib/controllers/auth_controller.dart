@@ -30,43 +30,41 @@ class AuthController extends GetxController implements GetxService {
   }
 
   Future<ResponseModel> login(String phone, String password) async {
-  print("Getting token");
-  print(await authRepo.getUserToken()); // Await the getUserToken() call
-  _isLoading = true;
-  update();
+    print("Getting token");
+    print(await authRepo.getUserToken()); // Await the getUserToken() call
+    _isLoading = true;
+    update();
 
-  Response response = await authRepo.login(phone, password);
-  late ResponseModel responseModel;
-
-  if (response.statusCode == 200) {
-    print("Backend Token");
-    dynamic token = response.body["token"];
-
-    if (token != null) {
-      if (token is String) {
-        authRepo.saveUserToken(token);
-        print(token);
-        responseModel = ResponseModel(true, token);
+    Response response = await authRepo.login(phone, password);
+    late ResponseModel responseModel;
+    log(response.body.toString());
+    if (response.statusCode == 200) {
+      print("Backend Token");
+      dynamic token = response.body["token"];
+      if (token != null) {
+        if (token != null) {
+          authRepo.saveUserToken(token.toString());
+          print(token.toString());
+          responseModel = ResponseModel(true, token.toString());
+        } else {
+          // Handle the scenario where the token is not a String
+          print("Invalid token format in the response");
+          responseModel = ResponseModel(false, "Invalid token format");
+        }
       } else {
-        // Handle the scenario where the token is not a String
-        print("Invalid token format in the response");
-        responseModel = ResponseModel(false, "Invalid token format");
+        // Handle the scenario where the token is null
+        print("Token not found in the response");
+        responseModel = ResponseModel(false, "Token not found");
       }
     } else {
-      // Handle the scenario where the token is null
-      print("Token not found in the response");
-      responseModel = ResponseModel(false, "Token not found");
+      print("Login Error: ${response.statusCode} - ${response.statusText}");
+      responseModel = ResponseModel(false, response.statusText!);
     }
-  } else {
-    print("Login Error: ${response.statusCode} - ${response.statusText}");
-    responseModel = ResponseModel(false, response.statusText!);
+
+    _isLoading = false;
+    update();
+    return responseModel;
   }
-
-  _isLoading = false;
-  update();
-  return responseModel;
-}
-
 
   // Future<ResponseModel> login(String phone, String password) async {
   //   print("Getting token");

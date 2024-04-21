@@ -56,7 +56,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
     return Column(
       children: [
         //slider section
-        GetBuilder<PopularProductController>(builder: (popularProducts) {  
+        GetBuilder<PopularProductController>(builder: (popularProducts) {
           //get builder used to get details from popular product model/api
           return popularProducts.isLoaded
               ? Container(
@@ -73,12 +73,11 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                         return _buildPageItem(position,
                             popularProducts.popularProductList[position]);
                       },
-                     onPageChanged: (int page) {
-  setState(() {
-    _currPageValue = page.toDouble();
-  });
-}
-                      ),
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currPageValue = page.toDouble();
+                        });
+                      }),
                 )
               : CircularProgressIndicator(
                   color: AppColors.mainColor,
@@ -90,7 +89,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             dotsCount: popularProducts.popularProductList.isEmpty
                 ? 1
                 : popularProducts.popularProductList.length,
-             position: _currPageValue.toInt(),
+            position: _currPageValue.toInt(),
             decorator: DotsDecorator(
               activeColor: AppColors.mainColor,
               size: const Size.square(9.0),
@@ -284,9 +283,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
               Get.toNamed(
                   RouteHelper.getPopularFood(index, 'home')); //pasing fnction
             },
-
-            child: 
-            Container(
+            child: Container(
               height: Dimentions.pageViewContainer,
               //no need kyuki apna parent widget ki hi height its taking
               //but jb it is wrapped in stack tb le lega ye height
@@ -296,20 +293,17 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                   borderRadius: BorderRadius.circular(Dimentions.radius30),
                   color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
                   //by the tym image is loaded as network image toh ye color rhega
-                   image: DecorationImage(
-                      fit: BoxFit.cover,          
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
                       image: NetworkImage(AppConstants.BASE_URL +
-                        AppConstants.UPLOAD_URL +
-                          popularProduct.img!))
-                  
-                          ),
-                          
+                          AppConstants.UPLOAD_URL +
+                          popularProduct.img!))),
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: Dimentions.pageViewTextContainer,
+              height: Dimentions.pageViewTextContainer + 6,
               margin: EdgeInsets.only(
                   left: Dimentions.width30,
                   right: Dimentions.width30,

@@ -36,9 +36,9 @@ class MyApp extends StatelessWidget {
     //   return GetBuilder<PopularProductController>(builder: (_) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-    //  home: SignInPage(),
+      // home: SignInPage(),
       initialRoute: RouteHelper.getSplashPage(),
-     getPages: RouteHelper.routes,
+      getPages: RouteHelper.routes,
     );
     //   });
     // });
