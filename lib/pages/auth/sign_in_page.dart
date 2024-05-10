@@ -37,7 +37,7 @@ class SignInPage extends StatelessWidget {
       log('message 4');
       authController.login(phone, password).then((status) {
         if (status.isSuccess) {
-          Get.toNamed(RouteHelper.getCartPage());
+          Get.toNamed(RouteHelper.getInitial());
           log('message 5');
           // Get.back();
           print("sucess registration");

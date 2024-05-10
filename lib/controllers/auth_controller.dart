@@ -4,6 +4,7 @@ import 'package:delivery/data/repository/auth_repo.dart';
 import 'package:delivery/models/response_model.dart';
 import 'package:delivery/models/signup_body_model.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -74,7 +75,6 @@ class AuthController extends GetxController implements GetxService {
 
   //   Response response = await authRepo.login(phone, password);
   //   late ResponseModel responseModel;
-
   //   if (response.statusCode == 200) {
   //     print("Backend Token");
   //     String? token = response.body["token"] as String?;
@@ -92,7 +92,6 @@ class AuthController extends GetxController implements GetxService {
   //     print("Login Error: ${response.statusCode} - ${response.statusText}");
   //     responseModel = ResponseModel(false, response.statusText!);
   //   }
-
   //   _isLoading = false;
   //   update();
   //   return responseModel;
@@ -104,5 +103,9 @@ class AuthController extends GetxController implements GetxService {
 
   bool userLoggedIn() {
     return authRepo.userLoggedIn();
+  }
+
+  bool clearSharedData() {
+   return authRepo.clearSharedData();
   }
 }

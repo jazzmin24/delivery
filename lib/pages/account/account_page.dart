@@ -1,9 +1,15 @@
+import 'dart:developer';
+
+import 'package:delivery/controllers/auth_controller.dart';
+import 'package:delivery/controllers/cart_controller.dart';
+import 'package:delivery/routes/route_helper.dart';
 import 'package:delivery/utils/colors.dart';
 import 'package:delivery/utils/dimentions.dart';
 import 'package:delivery/widgets/account_widget.dart';
 import 'package:delivery/widgets/app_icon.dart';
 import 'package:delivery/widgets/big_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -21,7 +27,7 @@ class AccountPage extends StatelessWidget {
       ),
       body: Container(
         width: double.maxFinite,
-        margin: EdgeInsets.only(top:Dimentions.height20),
+        margin: EdgeInsets.only(top: Dimentions.height20),
         child: Column(
           children: [
             //profile icon
@@ -29,76 +35,104 @@ class AccountPage extends StatelessWidget {
               icon: Icons.person,
               backgroundColor: AppColors.mainColor,
               iconColor: Colors.white,
-              iconSize: Dimentions.height45+Dimentions.height30,
-              size: Dimentions.height15*10,
-              ),
-              SizedBox(height: Dimentions.height30,),
-            
+              iconSize: Dimentions.height45 + Dimentions.height30,
+              size: Dimentions.height15 * 10,
+            ),
+            SizedBox(
+              height: Dimentions.height30,
+            ),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                      //name
-                  AccountWidget(
-                    appIcon: AppIcon(
-                  icon: Icons.person,
-                  backgroundColor: AppColors.mainColor,
-                  iconColor: Colors.white,
-                  iconSize: Dimentions.height10*5/2,
-                  size: Dimentions.height10*5,
-                  ), 
-                    bigText: BigText(text: 'Jasmin')
-                    ),
-                    SizedBox(height: Dimentions.height30,),
-                 //phone
+                    //name
                     AccountWidget(
-                    appIcon: AppIcon(
-                  icon: Icons.phone,
-                  backgroundColor: AppColors.yellowColor,
-                  iconColor: Colors.white,
-                  iconSize: Dimentions.height10*5/2,
-                  size: Dimentions.height10*5,
-                  ), 
-                    bigText: BigText(text: '98765xxxxx')
+                        appIcon: AppIcon(
+                          icon: Icons.person,
+                          backgroundColor: AppColors.mainColor,
+                          iconColor: Colors.white,
+                          iconSize: Dimentions.height10 * 5 / 2,
+                          size: Dimentions.height10 * 5,
+                        ),
+                        bigText: BigText(text: 'Jasmin')),
+                    SizedBox(
+                      height: Dimentions.height30,
                     ),
-                    SizedBox(height: Dimentions.height30,),
-                  //email
+                    //phone
                     AccountWidget(
-                    appIcon: AppIcon(
-                  icon: Icons.email,
-                  backgroundColor: AppColors.yellowColor,
-                  iconColor: Colors.white,
-                  iconSize: Dimentions.height10*5/2,
-                  size: Dimentions.height10*5,
-                  ), 
-                    bigText: BigText(text: 'jas@gmail.com')
+                        appIcon: AppIcon(
+                          icon: Icons.phone,
+                          backgroundColor: AppColors.yellowColor,
+                          iconColor: Colors.white,
+                          iconSize: Dimentions.height10 * 5 / 2,
+                          size: Dimentions.height10 * 5,
+                        ),
+                        bigText: BigText(text: '98765xxxxx')),
+                    SizedBox(
+                      height: Dimentions.height30,
                     ),
-                    SizedBox(height: Dimentions.height30,),
-                  //address
+                    //email
                     AccountWidget(
-                    appIcon: AppIcon(
-                  icon: Icons.location_on,
-                  backgroundColor: AppColors.yellowColor,
-                  iconColor: Colors.white,
-                  iconSize: Dimentions.height10*5/2,
-                  size: Dimentions.height10*5,
-                  ), 
-                    bigText: BigText(text: 'XYZ')
+                        appIcon: AppIcon(
+                          icon: Icons.email,
+                          backgroundColor: AppColors.yellowColor,
+                          iconColor: Colors.white,
+                          iconSize: Dimentions.height10 * 5 / 2,
+                          size: Dimentions.height10 * 5,
+                        ),
+                        bigText: BigText(text: 'jas@gmail.com')),
+                    SizedBox(
+                      height: Dimentions.height30,
                     ),
-                    SizedBox(height: Dimentions.height30,),
-                   //message
+                    //address
                     AccountWidget(
-                    appIcon: AppIcon(
-                  icon: Icons.message_outlined,
-                  backgroundColor: Colors.redAccent,
-                  iconColor: Colors.white,
-                  iconSize: Dimentions.height10*5/2,
-                  size: Dimentions.height10*5,
-                  ), 
-                    bigText: BigText(text: 'Check messages')
+                        appIcon: AppIcon(
+                          icon: Icons.location_on,
+                          backgroundColor: AppColors.yellowColor,
+                          iconColor: Colors.white,
+                          iconSize: Dimentions.height10 * 5 / 2,
+                          size: Dimentions.height10 * 5,
+                        ),
+                        bigText: BigText(text: 'XYZ')),
+                    SizedBox(
+                      height: Dimentions.height30,
                     ),
-                    SizedBox(height: Dimentions.height30,),     
-              
+                    //message
+                    AccountWidget(
+                        appIcon: AppIcon(
+                          icon: Icons.message_outlined,
+                          backgroundColor: Colors.redAccent,
+                          iconColor: Colors.white,
+                          iconSize: Dimentions.height10 * 5 / 2,
+                          size: Dimentions.height10 * 5,
+                        ),
+                        bigText: BigText(text: 'Check messages')),
+                    SizedBox(
+                      height: Dimentions.height30,
+                    ),
+                    //log out
+                    GestureDetector(
+                      onTap: () {
+                        if (Get.find<AuthController>().userLoggedIn()) {
+                          Get.find<AuthController>().clearSharedData();
+                          Get.find<CartController>().clear();
+                          Get.find<CartController>().clearCartHistory();
+                          Get.offNamed(RouteHelper.getSignInPage());
+                        } else {
+                          log('You logged out!');
+                        }
+                      },
+                      child: AccountWidget(
+                          appIcon: AppIcon(
+                            icon: Icons.logout,
+                            backgroundColor: Colors.redAccent,
+                            iconColor: Colors.white,
+                            iconSize: Dimentions.height10 * 5 / 2,
+                            size: Dimentions.height10 * 5,
+                          ),
+                          bigText: BigText(text: 'Logout')),
+                    ),
                   ],
                 ),
               ),

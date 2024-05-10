@@ -23,6 +23,7 @@ class SignUpPage extends StatelessWidget {
     var signUpImages = ["t.png", "f.png", "g.png"];
 
     void _registration(AuthController authController) {
+      
       String name = nameController.text.trim();
       String phone = phoneController.text.trim();
       String email = emailController.text.trim();
