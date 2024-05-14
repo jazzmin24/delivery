@@ -2,6 +2,7 @@ import 'package:delivery/base/custom_loader.dart';
 import 'package:delivery/base/show_custom_snackbar.dart';
 import 'package:delivery/controllers/auth_controller.dart';
 import 'package:delivery/models/signup_body_model.dart';
+import 'package:delivery/routes/route_helper.dart';
 import 'package:delivery/utils/colors.dart';
 import 'package:delivery/utils/dimentions.dart';
 import 'package:delivery/widgets/app_text_field.dart';
@@ -23,7 +24,6 @@ class SignUpPage extends StatelessWidget {
     var signUpImages = ["t.png", "f.png", "g.png"];
 
     void _registration(AuthController authController) {
-      
       String name = nameController.text.trim();
       String phone = phoneController.text.trim();
       String email = emailController.text.trim();
@@ -50,6 +50,7 @@ class SignUpPage extends StatelessWidget {
             name: name, phone: phone, email: email, password: password);
         authController.registration(signUpBody).then((status) {
           if (status.isSuccess) {
+           Get.offNamed(RouteHelper.getInitial());
             print("sucess registration");
           } else {
             showCustomSnackBar(status.message);
@@ -94,7 +95,8 @@ class SignUpPage extends StatelessWidget {
                       AppTextField(
                           textController: passwordController,
                           hintText: 'Password',
-                          icon: Icons.password_sharp, isObscure: true),
+                          icon: Icons.password_sharp,
+                          isObscure: true),
                       SizedBox(
                         height: Dimentions.height20,
                       ),
@@ -177,7 +179,7 @@ class SignUpPage extends StatelessWidget {
                     ],
                   ),
                 )
-              :const CustomLoader(); 
+              : const CustomLoader();
         }));
   }
 }

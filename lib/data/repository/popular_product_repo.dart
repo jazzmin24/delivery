@@ -14,6 +14,6 @@ class PopularProductRepo extends GetxService {
   Future<Response> getPopularProductList() async {
 //an empty method is created of future type which sends response from the server
     //phla api call krega fir kuch return krega
-    return await apiClient.getData(AppConstants.POPULAR_PRODUCT_URI);
+    return await apiClient.getData(AppConstants.POPULAR_PRODUCT_URI );
   }
 }

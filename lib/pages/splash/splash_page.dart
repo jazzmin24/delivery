@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 //  Future<void> _loadResource() async {
 //    await Get.find<PopularProductController>().getPopularProductList();
-//     //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup 
+//     //to access controller toh till controller but agr jo list present h usme need to access tht particalar to complete writeup
 //    await Get.find<RecommendedProductController>().getRecommendedProductList();
 //   }
 
@@ -55,10 +55,11 @@ class _SplashScreenState extends State<SplashScreen>
                 width: Dimentions.splashImg,
               ))),
           //SizedBox(width: 5,),
+
           Text(
             'The Best Food',
             style: GoogleFonts.allura(
-                fontSize: Dimentions.font26*2,
+                fontSize: Dimentions.font26 * 2,
                 fontWeight: FontWeight.w700,
                 fontStyle: FontStyle.italic,
                 color: Colors.black),

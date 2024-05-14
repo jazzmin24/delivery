@@ -1,18 +1,8 @@
 import 'package:delivery/controllers/cart_controller.dart';
 import 'package:delivery/controllers/popular_product_controller.dart';
 import 'package:delivery/controllers/recommended_product_controller.dart';
-import 'package:delivery/pages/auth/sign_in_page.dart';
-import 'package:delivery/pages/auth/sign_up_page.dart';
-import 'package:delivery/pages/cart/cart_page.dart';
-import 'package:delivery/pages/splash/splash_page.dart';
 import 'package:delivery/routes/route_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:delivery/controllers/popular_product_controller.dart';
-import 'package:delivery/pages/food/popular_food_detail.dart';
-import 'package:delivery/pages/food/recommended_food_detail.dart';
-import 'package:delivery/pages/home/food_page_body.dart';
-import 'package:delivery/pages/home/main_food_page.dart';
-import 'package:delivery/widgets/expandable_text_widget.dart';
 import 'package:get/get.dart';
 import 'helper/dependencies.dart' as dep;
 
